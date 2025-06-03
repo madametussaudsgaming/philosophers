@@ -6,17 +6,11 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:55:35 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/05/25 03:26:16 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/02 21:22:16 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-static int	err(char *msg)
-{
-	printf("%s\n", msg);
-	return (0);
-}
 
 int	arg_scanner(char *arg)
 {
@@ -37,12 +31,18 @@ int	validate_args(int argc, char **argv)
 	int	i;
 
 	if (argc != 5 && argc != 6)
-		return (err("./philo philo_num time_die time_eat time_sleep [nbr_meals]"));
+	{
+		printf ("./philo philo_num time_die time_eat time_sleep [nbr_meals]\n");
+		return (0);
+	}
 	i = 0;
 	while (++i < argc)
 	{
 		if (!arg_scanner(argv[i]) || ft_atoi(argv[i]) <= 0)
-			return (err("All arguments are positive INTEGERS!"));
+		{
+			printf ("INTEGERS ONLY\n");
+			return (0);
+		}
 	}
 	return (1);
 }

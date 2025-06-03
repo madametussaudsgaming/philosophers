@@ -6,52 +6,58 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:45:16 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/05/26 20:18:32 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:21:57 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
+void	*check_for_deaths(t_program *prog)
+{
+	int		i;
+	long	now;
+	long	last_meal;
+	int		id;
+
+	i = 0;
+	now = get_time_ms();
+	while (i < prog->num_of_philos)
+	{
+		pthread_mutex_lock(&prog->philos[i].meal_mutex);
+		last_meal = prog->philos[i].last_meal_time;
+		pthread_mutex_unlock(&prog->philos[i].meal_mutex);
+		if (now - last_meal > prog->time_to_die)
+		{
+			pthread_mutex_lock(&prog->death_mutex);
+			if (!prog->someone_died)
+			{
+				incaseofdeath(prog, i, id, now);
+			}
+			pthread_mutex_unlock(&prog->death_mutex);
+			return (NULL);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 void	*monitor(void *arg)
 {
 	t_program	*prog;
-	int			i;
-	int			full_count;
+	int			someone_died;
+	int			current_done_count;
 
 	prog = (t_program *)arg;
-	while (1)
+	if (prog->meal_needs > 0)
 	{
-		i = 0;
-		full_count = 0;
-		while (i < prog->num_of_philos)
-		{
-			pthread_mutex_lock(&prog->meal_lock);
-			if (!prog->philos[i].eating && get_time_ms() - prog->philos[i].last_meal > prog->time_to_die)
-			{
-				pthread_mutex_lock(&prog->dead_lock);
-				prog->imdead = 1;
-				pthread_mutex_unlock(&prog->dead_lock);
-				pthread_mutex_unlock(&prog->meal_lock);
-				print_state(&prog->philos[i], "died");
-				return (NULL);
-			}
-			if (prog->must_eat_num > 0 && !prog->philos[i].done_eating && prog->philos[i].meals_eaten >= prog->must_eat_num)
-			{
-				prog->philos[i].done_eating = true;
-				prog->philos_done++;
-			}
-			pthread_mutex_unlock(&prog->meal_lock);
-			i++;
-		}
-		if (prog->must_eat_num > 0 &&
-			prog->philos_done == prog->num_of_philos)
-		{
-			pthread_mutex_lock(&prog->dead_lock);
-			prog->imdead = 1;
-			pthread_mutex_unlock(&prog->dead_lock);
-			return (NULL);
-		}
-		usleep(1000);
+		can_end(prog);
 	}
+	else
+	{
+		endless(prog);
+	}
+	pthread_mutex_lock(&prog->simulation_mutex);
+	prog->simulation_active = 0;
+	pthread_mutex_unlock(&prog->simulation_mutex);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 14:52:17 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/05/26 00:00:08 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/01 16:40:36 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ void	cleanup(t_program *prog)
 	i = 0;
 	while (i < prog->num_of_philos)
 	{
-		pthread_mutex_destroy(&prog->forks[i]);
+		pthread_mutex_destroy(&prog->fork_mutexes[i]);
+		pthread_mutex_destroy(&prog->philos[i].meal_mutex);
 		i++;
 	}
-	pthread_mutex_destroy(&prog->write_lock);
-	pthread_mutex_destroy(&prog->meal_lock);
-	pthread_mutex_destroy(&prog->dead_lock);
+	pthread_mutex_destroy(&prog->print_mutex);
+	pthread_mutex_destroy(&prog->death_mutex);
+	pthread_mutex_destroy(&prog->simulation_mutex);
+	pthread_mutex_destroy(&prog->done_count_mutex);
 	free(prog->philos);
-	free(prog->forks);
+	free(prog->fork_mutexes);
 }

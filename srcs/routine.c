@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/22 17:36:08 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/05/26 21:17:18 by rpadasia         ###   ########.fr       */
+/*   Created: 2025/06/01 17:36:41 by rpadasia          #+#    #+#             */
+/*   Updated: 2025/06/03 18:04:16 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,77 +14,72 @@
 
 void	print_state(t_philo *philo, char *msg)
 {
-	pthread_mutex_lock(philo->write_lock);
-	pthread_mutex_lock(philo->youredead);
-	if (!*(philo->dead))
-		printf("%u %d %s\n", get_time_ms() - philo->start_time, philo->id, msg);
-	pthread_mutex_unlock(philo->youredead);
-	pthread_mutex_unlock(philo->write_lock);
+	pthread_mutex_lock(&philo->program->print_mutex);
+	pthread_mutex_lock(&philo->program->death_mutex);
+	if (!(philo->program->someone_died))
+	{
+		printf("%lu Philo %d %s\n", get_time_ms() - philo->program->start_time,
+			philo->id + 1, msg);
+	}
+	pthread_mutex_unlock(&philo->program->death_mutex);
+	pthread_mutex_unlock(&philo->program->print_mutex);
 }
 
-void	smart_sleep(unsigned int time_ms)
+void	setforks(t_philo *philo, int *first, int *second)
 {
-	unsigned int	start;
+	t_program	*prog;
 
-	start = get_time_ms();
-	while ((get_time_ms() - start) < time_ms)
-		usleep(500);
+	prog = philo->program;
+	if (philo->id % 2 == 0)
+	{
+		*first = philo->id;
+		*second = (philo->id + 1) % prog->num_of_philos;
+	}
+	else
+	{
+		*first = (philo->id + 1) % prog->num_of_philos;
+		*second = philo->id;
+	}
+}
+
+void	aftercare(t_philo *philo, int first_fork, int second_fork)
+{
+	t_program	*prog;
+
+	prog = philo->program;
+	pthread_mutex_lock(&prog->done_count_mutex);
+	prog->done_count++;
+	pthread_mutex_unlock(&prog->done_count_mutex);
+	pthread_mutex_unlock(&philo->meal_mutex);
+	pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
+	pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);
 }
 
 void	*philo_routine(void *arg)
 {
 	t_philo		*philo;
+	t_program	*prog;
+	int			first_fork;
+	int			second_fork;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		usleep(1000);
+	prog = philo->program;
+	setforks(philo, &first_fork, &second_fork);
 	while (1)
 	{
-		if (philo->id % 2 == 0)
+		if (simulation_status(prog))
+			break ;
+		actionman(philo, first_fork, second_fork);
+		if (prog->meal_needs > 0 && philo->meals_eaten >= prog->meal_needs)
 		{
-			pthread_mutex_lock(philo->right);
-			print_state(philo, "has taken a right fork");
-			pthread_mutex_lock(philo->left);
-			print_state(philo, "has taken a left fork");
-		}
-		else
-		{
-			pthread_mutex_lock(philo->left);
-			print_state(philo, "has taken a left fork");
-			pthread_mutex_lock(philo->right);
-			print_state(philo, "has taken a right fork");
-		}
-		pthread_mutex_lock(philo->meal_lock);
-		philo->eating = true;
-		philo->last_meal = get_time_ms();
-		print_state(philo, "is eating");
-		pthread_mutex_unlock(philo->meal_lock);
-		smart_sleep(philo->prog->time_to_eat);
-		pthread_mutex_lock(philo->meal_lock);
-		philo->meals_eaten += 1;
-		philo->eating = false;
-		if (philo->prog->must_eat_num > 0 &&
-			philo->meals_eaten >= philo->prog->must_eat_num)
-		{
-			pthread_mutex_unlock(philo->meal_lock);
-			pthread_mutex_unlock(philo->right);
-			pthread_mutex_unlock(philo->left);
+			aftercare(philo, first_fork, second_fork);
 			break ;
 		}
-		pthread_mutex_unlock(philo->meal_lock);
-		pthread_mutex_unlock(philo->right);
-		pthread_mutex_unlock(philo->left);
-		print_state(philo, "is sleeping");
-		smart_sleep(philo->prog->time_to_sleep);
-		print_state(philo, "is thinking");
-		pthread_mutex_lock(philo->youredead);
-		if (*(philo->dead))
-		{
-			print_state(philo, "has died!");
-			pthread_mutex_unlock(philo->youredead);
-			break ;
-		}
-		pthread_mutex_unlock(philo->youredead);
+		pthread_mutex_unlock(&philo->meal_mutex);
+		pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
+		pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);
+		print_state(philo, "is sleeping.");
+		usleep(prog->time_to_sleep * 1000);
 	}
 	return (NULL);
 }
