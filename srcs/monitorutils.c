@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:07:00 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/03 19:09:47 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/04 00:35:16 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	can_end(t_program *prog)
 void	endless(t_program *prog)
 {
 	int			someone_died;
-	int			current_done_count;
 
 	pthread_mutex_lock(&prog->death_mutex);
 	someone_died = prog->someone_died;
@@ -54,8 +53,10 @@ void	endless(t_program *prog)
 	}
 }
 
-void	incaseofdeath(t_program *prog, int i, int id, int now)
+void	incaseofdeath(t_program *prog, int i, int now)
 {
+	int	id;
+
 	prog->someone_died = 1;
 	pthread_mutex_lock(&prog->print_mutex);
 	id = prog->philos[i].id + 1;

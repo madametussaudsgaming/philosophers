@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:45:16 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/03 18:21:57 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/04 00:35:05 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	*check_for_deaths(t_program *prog)
 	int		i;
 	long	now;
 	long	last_meal;
-	int		id;
 
 	i = 0;
 	now = get_time_ms();
@@ -31,7 +30,7 @@ void	*check_for_deaths(t_program *prog)
 			pthread_mutex_lock(&prog->death_mutex);
 			if (!prog->someone_died)
 			{
-				incaseofdeath(prog, i, id, now);
+				incaseofdeath(prog, i, now);
 			}
 			pthread_mutex_unlock(&prog->death_mutex);
 			return (NULL);
@@ -44,8 +43,6 @@ void	*check_for_deaths(t_program *prog)
 void	*monitor(void *arg)
 {
 	t_program	*prog;
-	int			someone_died;
-	int			current_done_count;
 
 	prog = (t_program *)arg;
 	if (prog->meal_needs > 0)

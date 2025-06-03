@@ -6,18 +6,22 @@
 #    By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/16 17:41:20 by rpadasia          #+#    #+#              #
-#    Updated: 2025/05/16 18:02:56 by rpadasia         ###   ########.fr        #
+#    Updated: 2025/06/04 00:32:18 by rpadasia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= philo
 CC		= gcc
-CFLAGS	= -Werror -pthread #CHANGE LATER
+CFLAGS	= -Wall -Wextra -Werror -pthread
 
 SRC_DIR	= srcs/
 OBJ_DIR	= objs/
 
-SRCS	= $(wildcard $(SRC_DIR)/*.c)
+SRC		= main.c cleanup.c create_threads.c exception.c\
+			initialize.c monitor.c monitorutils.c routine.c\
+			routineutils.c utils1.c validity.c\
+
+SRCS	= $(addprefix $(SRC_DIR), $(SRC))
 OBJS	= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)

@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:06:39 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/03 18:20:37 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/04 00:35:30 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,6 @@ int				simulation_status(t_program *prog);
 void			actionman(t_philo *philo, int first_fork, int second_fork);
 void			endless(t_program *prog);
 void			can_end(t_program *prog);
-void			incaseofdeath(t_program *prog, int i, int id, int now);
+void			incaseofdeath(t_program *prog, int i, int now);
 
 #endif
