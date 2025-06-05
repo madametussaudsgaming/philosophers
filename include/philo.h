@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:06:39 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/04 00:35:30 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:41:41 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,7 @@ void			actionman(t_philo *philo, int first_fork, int second_fork);
 void			endless(t_program *prog);
 void			can_end(t_program *prog);
 void			incaseofdeath(t_program *prog, int i, int now);
+void			ft_usleep(long duration_ms);
+void			ft_monitor_sleep(void);
 
 #endif

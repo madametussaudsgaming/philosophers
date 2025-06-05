@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:45:16 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/04 00:35:05 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:37:55 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	*check_for_deaths(t_program *prog)
 	long	last_meal;
 
 	i = 0;
-	now = get_time_ms();
 	while (i < prog->num_of_philos)
 	{
+		now = get_time_ms();
 		pthread_mutex_lock(&prog->philos[i].meal_mutex);
 		last_meal = prog->philos[i].last_meal_time;
 		pthread_mutex_unlock(&prog->philos[i].meal_mutex);

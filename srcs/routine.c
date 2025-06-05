@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:36:41 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/03 18:04:16 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:33:38 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	*philo_routine(void *arg)
 		pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
 		pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);
 		print_state(philo, "is sleeping.");
-		usleep(prog->time_to_sleep * 1000);
+		ft_usleep(prog->time_to_sleep);
 	}
 	return (NULL);
 }

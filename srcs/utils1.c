@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:02:58 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/03 18:06:24 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:39:18 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,9 @@ size_t	ft_strlen(const	char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
+}
+
+void	ft_monitor_sleep(void)
+{
+	usleep(100);
 }

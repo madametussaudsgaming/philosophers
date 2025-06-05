@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:07:00 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/04 00:35:16 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:36:32 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	can_end(t_program *prog)
 	while (current_done_count < prog->num_of_philos && !someone_died)
 	{
 		check_for_deaths(prog);
-		usleep(1000);
+		ft_monitor_sleep();
 		pthread_mutex_lock(&prog->done_count_mutex);
 		current_done_count = prog->done_count;
 		pthread_mutex_unlock(&prog->done_count_mutex);
@@ -46,7 +46,7 @@ void	endless(t_program *prog)
 	while (!someone_died)
 	{
 		check_for_deaths(prog);
-		usleep(1000);
+		ft_monitor_sleep();
 		pthread_mutex_lock(&prog->death_mutex);
 		someone_died = prog->someone_died;
 		pthread_mutex_unlock(&prog->death_mutex);
