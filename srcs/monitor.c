@@ -6,13 +6,24 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:45:16 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/05 15:37:55 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 22:52:05 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	*check_for_deaths(t_program *prog)
+void	incaseofdeath(t_program *prog, int i, int now)
+{
+	int	id;
+
+	prog->someone_died = 1;
+	pthread_mutex_lock(&prog->print_mutex);
+	id = prog->philos[i].id + 1;
+	printf("%ld %d has died\n", now - prog->start_time, id);
+	pthread_mutex_unlock(&prog->print_mutex);
+}
+
+int	check_for_deaths(t_program *prog)
 {
 	int		i;
 	long	now;
@@ -29,15 +40,13 @@ void	*check_for_deaths(t_program *prog)
 		{
 			pthread_mutex_lock(&prog->death_mutex);
 			if (!prog->someone_died)
-			{
 				incaseofdeath(prog, i, now);
-			}
 			pthread_mutex_unlock(&prog->death_mutex);
-			return (NULL);
+			return (1);
 		}
 		i++;
 	}
-	return (NULL);
+	return (0);
 }
 
 void	*monitor(void *arg)

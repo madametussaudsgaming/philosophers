@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:07:00 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/05 15:36:32 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 22:52:02 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,52 +14,32 @@
 
 void	can_end(t_program *prog)
 {
-	int			someone_died;
 	int			current_done_count;
 
-	pthread_mutex_lock(&prog->done_count_mutex);
-	current_done_count = prog->done_count;
-	pthread_mutex_unlock(&prog->done_count_mutex);
-	pthread_mutex_lock(&prog->death_mutex);
-	someone_died = prog->someone_died;
-	pthread_mutex_unlock(&prog->death_mutex);
-	while (current_done_count < prog->num_of_philos && !someone_died)
+	while (1)
 	{
-		check_for_deaths(prog);
-		ft_monitor_sleep();
 		pthread_mutex_lock(&prog->done_count_mutex);
 		current_done_count = prog->done_count;
 		pthread_mutex_unlock(&prog->done_count_mutex);
-		pthread_mutex_lock(&prog->death_mutex);
-		someone_died = prog->someone_died;
-		pthread_mutex_unlock(&prog->death_mutex);
+		if (current_done_count >= prog->num_of_philos)
+		{
+			pthread_mutex_lock(&prog->simulation_mutex);
+			prog->simulation_active = 0;
+			pthread_mutex_unlock(&prog->simulation_mutex);
+			break ;
+		}
+		if (check_for_deaths(prog))
+			break ;
+		usleep(50);
 	}
 }
 
 void	endless(t_program *prog)
 {
-	int			someone_died;
-
-	pthread_mutex_lock(&prog->death_mutex);
-	someone_died = prog->someone_died;
-	pthread_mutex_unlock(&prog->death_mutex);
-	while (!someone_died)
+	while (1)
 	{
-		check_for_deaths(prog);
-		ft_monitor_sleep();
-		pthread_mutex_lock(&prog->death_mutex);
-		someone_died = prog->someone_died;
-		pthread_mutex_unlock(&prog->death_mutex);
+		if (check_for_deaths(prog))
+			break ;
+		usleep(50);
 	}
-}
-
-void	incaseofdeath(t_program *prog, int i, int now)
-{
-	int	id;
-
-	prog->someone_died = 1;
-	pthread_mutex_lock(&prog->print_mutex);
-	id = prog->philos[i].id + 1;
-	printf("%ld %d has died\n", now - prog->start_time, id);
-	pthread_mutex_unlock(&prog->print_mutex);
 }
