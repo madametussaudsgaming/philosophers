@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:06:39 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/05 15:41:41 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/05 20:03:43 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int				init_program(t_program *prog, int argc, char **argv);
 int				init_philos_and_forks(t_program *prog);
 void			cleanup(t_program *prog);
 void			*monitor(void *arg);
-void			*check_for_deaths(t_program *prog);
+int				check_for_deaths(t_program *prog);
 void			*philo_routine(void *arg);
 int				create_threads(t_program *prog);
 void			join_threads(t_program *prog);
