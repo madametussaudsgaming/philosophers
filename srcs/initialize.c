@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:14:09 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/02 21:37:48 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:32:48 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	init_philos_2(t_program *prog)
 		prog->philos[i].meals_eaten = 0;
 		prog->philos[i].last_meal_time = prog->start_time;
 		prog->philos[i].program = prog;
+		prog->philos[i].complete = 0;
 		pthread_mutex_init(&prog->philos[i].meal_mutex, NULL);
 		i++;
 	}

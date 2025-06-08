@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:36:41 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/07 18:07:47 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:43:43 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	aftercare(t_philo *philo, int first_fork, int second_fork)
 	t_program	*prog;
 
 	prog = philo->program;
+	philo->last_meal_time = LONG_MAX;
 	pthread_mutex_lock(&prog->done_count_mutex);
 	prog->done_count++;
 	pthread_mutex_unlock(&prog->done_count_mutex);

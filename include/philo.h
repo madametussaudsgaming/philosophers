@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:06:39 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/05 20:03:43 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:41:28 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <limits.h>
 # include <sys/time.h>
 
 /*
@@ -34,6 +35,7 @@ typedef struct s_philo
 	long				last_meal_time;
 	struct s_program	*program;
 	pthread_mutex_t		meal_mutex;
+	int					complete;
 }	t_philo;
 
 typedef struct s_program
