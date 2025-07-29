@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routineutils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
+/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:00:57 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/07 18:06:49 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/07/29 10:22:11 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	actionman(t_philo *philo, int first_fork, int second_fork)
 	if (prog->someone_died)
 		return ;
 	print_state(philo, "is thinking");
+	ft_usleep(prog->time_to_eat / 2);
 	pthread_mutex_lock(&prog->fork_mutexes[first_fork]);
 	print_state(philo, "has taken a fork");
 	pthread_mutex_lock(&prog->fork_mutexes[second_fork]);
