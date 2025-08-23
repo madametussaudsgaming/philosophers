@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   create_threads.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
+/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 22:07:09 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/05 22:59:23 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/08/23 16:28:22 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-unsigned int	get_time_ms(void)
+long	get_time_ms(void)
 {
 	struct timeval	tv;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
+/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:06:39 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/08 15:41:28 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/08/23 17:01:11 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct s_program
 }	t_program;
 
 int				ft_atoi(const char *str);
-unsigned int	get_time_ms(void);
+long			get_time_ms(void);
 int				validate_args(int argc, char **argv);
 int				init_program(t_program *prog, int argc, char **argv);
 int				init_philos_and_forks(t_program *prog);
@@ -70,12 +70,12 @@ int				create_threads(t_program *prog);
 void			join_threads(t_program *prog);
 void			print_state(t_philo *philo, char *msg);
 void			*exception(void *arg);
-int				simulation_status(t_program *prog);
+// int				simulation_status(t_program *prog);
 void			actionman(t_philo *philo, int first_fork, int second_fork);
 void			endless(t_program *prog);
 void			can_end(t_program *prog);
-void			incaseofdeath(t_program *prog, int i, int now);
-void			ft_usleep(long duration_ms);
+void			incaseofdeath(t_program *prog, int i, long now);
+void			ft_usleep(t_program *prog, long duration_ms);
 void			ft_monitor_sleep(void);
 
 #endif

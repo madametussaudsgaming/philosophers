@@ -6,13 +6,13 @@
 /*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:00:57 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/07/29 10:22:11 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/08/23 20:23:17 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	ft_usleep(long duration_ms)
+void	ft_usleep(t_program *prog, long duration_ms)
 {
 	long	start;
 	long	current;
@@ -21,16 +21,16 @@ void	ft_usleep(long duration_ms)
 	start = get_time_ms();
 	while (1)
 	{
+		if (prog->someone_died)
+			break ;
 		current = get_time_ms();
 		remaining = duration_ms - (current - start);
 		if (remaining <= 0)
 			break ;
-		if (remaining > 20)
-			usleep(remaining * 800);
-		else if (remaining > 5)
-			usleep(1000);
+		if (remaining > 10)
+			usleep(5000);
 		else
-			usleep(100);
+			usleep(200);
 	}
 }
 
@@ -57,7 +57,7 @@ void	actionman(t_philo *philo, int first_fork, int second_fork)
 	if (prog->someone_died)
 		return ;
 	print_state(philo, "is thinking");
-	ft_usleep(prog->time_to_eat / 2);
+	ft_usleep(prog, prog->time_to_eat / 2);
 	pthread_mutex_lock(&prog->fork_mutexes[first_fork]);
 	print_state(philo, "has taken a fork");
 	pthread_mutex_lock(&prog->fork_mutexes[second_fork]);
@@ -73,5 +73,5 @@ void	actionman(t_philo *philo, int first_fork, int second_fork)
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
 	print_state(philo, "is eating");
-	ft_usleep(prog->time_to_eat);
+	ft_usleep(prog, prog->time_to_eat);
 }

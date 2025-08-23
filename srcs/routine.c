@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
+/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:36:41 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/08 15:43:43 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/08/23 17:01:32 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	*philo_routine(void *arg)
 		pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
 		pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);
 		print_state(philo, "is sleeping.");
-		ft_usleep(prog->time_to_sleep);
+		ft_usleep(prog, prog->time_to_sleep);
 	}
 	return (NULL);
 }

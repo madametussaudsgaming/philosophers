@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   monitorutils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
+/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:07:00 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/06/05 22:52:02 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/08/23 16:36:16 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/philo.h"
 
@@ -43,3 +44,4 @@ void	endless(t_program *prog)
 		usleep(50);
 	}
 }
+
