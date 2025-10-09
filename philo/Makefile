@@ -6,13 +6,13 @@
 #    By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/16 17:41:20 by rpadasia          #+#    #+#              #
-#    Updated: 2025/06/08 15:57:23 by rpadasia         ###   ########.fr        #
+#    Updated: 2025/10/09 15:56:24 by rpadasia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= philo
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -pthread
+CFLAGS	= -Wall -Wextra -Werror -pthread -p -fsanitize=thread
 
 SRC_DIR	= srcs/
 OBJ_DIR	= objs/

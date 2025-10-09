@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:36:41 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/10/08 15:40:09 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/10/09 16:14:45 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,12 @@ void	aftercare(t_philo *philo, int first_fork, int second_fork)
 	t_program	*prog;
 
 	prog = philo->program;
+	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = LONG_MAX;
+	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_lock(&prog->done_count_mutex);
 	prog->done_count++;
 	pthread_mutex_unlock(&prog->done_count_mutex);
-	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
 	pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);
 }
@@ -74,7 +75,6 @@ void	*philo_routine(void *arg)
 			aftercare(philo, first_fork, second_fork);
 			break ;
 		}
-		pthread_mutex_unlock(&philo->meal_mutex);
 		pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
 		pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);
 		print_state(philo, "is sleeping.");
