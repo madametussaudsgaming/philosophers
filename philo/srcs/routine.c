@@ -6,7 +6,7 @@
 /*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:36:41 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/10/09 16:14:45 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/10/09 17:38:14 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,14 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	prog = philo->program;
 	setforks(philo, &first_fork, &second_fork);
-	while (!prog->someone_died && prog->simulation_active)
+	while (!simulation_status(prog))
 	{
-		actionman(philo, first_fork, second_fork);
+		if (!actionman(philo, first_fork, second_fork))
+			break ;
 		if (prog->meal_needs > 0 && philo->meals_eaten >= prog->meal_needs)
 		{
 			aftercare(philo, first_fork, second_fork);
-			break ;
+			return (NULL);
 		}
 		pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
 		pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);

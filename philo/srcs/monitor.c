@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:45:16 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/10/08 15:44:39 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/10/09 16:48:23 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 void	incaseofdeath(t_program *prog, int i, long now)
 {
-	int	id;
-
+	pthread_mutex_lock(&prog->death_mutex);
 	prog->someone_died = 1;
+	pthread_mutex_unlock(&prog->death_mutex);
 	pthread_mutex_lock(&prog->print_mutex);
-	id = prog->philos[i].id + 1;
-	printf("%ld %d has died\n", now - prog->start_time, id);
+	printf("%ld %d has died\n", now - prog->start_time, prog->philos[i].id + 1);
 	pthread_mutex_unlock(&prog->print_mutex);
 }
 
@@ -38,10 +37,8 @@ int	check_for_deaths(t_program *prog)
 		pthread_mutex_unlock(&prog->philos[i].meal_mutex);
 		if (now - last_meal > prog->time_to_die)
 		{
-			pthread_mutex_lock(&prog->death_mutex);
 			if (!prog->someone_died)
 				incaseofdeath(prog, i, now);
-			pthread_mutex_unlock(&prog->death_mutex);
 			return (1);
 		}
 		i++;

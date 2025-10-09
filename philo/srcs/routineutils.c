@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routineutils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:00:57 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/09/15 17:28:57 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/10/09 17:48:42 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,16 @@ void	ft_usleep(t_program *prog, long duration_ms)
 	long	start;
 	long	current;
 	long	remaining;
+	int		died;
 
+	died = 0;
 	start = get_time_ms();
 	while (1)
 	{
-		if (prog->someone_died)
+		pthread_mutex_lock(&prog->death_mutex);
+		died = prog->someone_died;
+		pthread_mutex_unlock(&prog->death_mutex);
+		if (died)
 			break ;
 		current = get_time_ms();
 		remaining = duration_ms - (current - start);
@@ -34,38 +39,51 @@ void	ft_usleep(t_program *prog, long duration_ms)
 	}
 }
 
-// int	simulation_status(t_program *prog)
-// {
-// 	pthread_mutex_lock(&prog->simulation_mutex);
-// 	pthread_mutex_lock(&prog->death_mutex);
-// 	if (!prog->simulation_active || prog->someone_died)
-// 	{
-// 		pthread_mutex_unlock(&prog->simulation_mutex);
-// 		pthread_mutex_unlock(&prog->death_mutex);
-// 		return (1);
-// 	}
-// 	pthread_mutex_unlock(&prog->death_mutex);
-// 	pthread_mutex_unlock(&prog->simulation_mutex);
-// 	return (0);
-// }
+int	simulation_status(t_program *prog)
+{
+	int	died;
+	int	active;
 
-void	actionman(t_philo *philo, int first_fork, int second_fork)
+	pthread_mutex_lock(&prog->death_mutex);
+	died = prog->someone_died;
+	pthread_mutex_unlock(&prog->death_mutex);
+	pthread_mutex_lock(&prog->simulation_mutex);
+	active = prog->simulation_active;
+	pthread_mutex_unlock(&prog->simulation_mutex);
+	if (died || !active)
+		return (1);
+	return (0);
+}
+
+int	philo_checker(t_program	*prog)
+{
+	int	died;
+
+	pthread_mutex_lock(&prog->death_mutex);
+	died = prog->someone_died;
+	pthread_mutex_unlock(&prog->death_mutex);
+	if (died)
+		return (0);
+	return (1);
+}
+
+int	actionman(t_philo *philo, int first_fork, int second_fork)
 {
 	t_program	*prog;
 
 	prog = philo->program;
-	if (prog->someone_died)
-		return ;
+	if (!philo_checker(prog))
+		return (0);
 	print_state(philo, "is thinking");
 	ft_usleep(prog, 1);
 	pthread_mutex_lock(&prog->fork_mutexes[first_fork]);
 	print_state(philo, "has taken a fork");
 	pthread_mutex_lock(&prog->fork_mutexes[second_fork]);
-	if (prog->someone_died)
+	if (!philo_checker(prog))
 	{
 		pthread_mutex_unlock(&prog->fork_mutexes[second_fork]);
 		pthread_mutex_unlock(&prog->fork_mutexes[first_fork]);
-		return ;
+		return (0);
 	}
 	print_state(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->meal_mutex);
@@ -74,4 +92,5 @@ void	actionman(t_philo *philo, int first_fork, int second_fork)
 	pthread_mutex_unlock(&philo->meal_mutex);
 	print_state(philo, "is eating");
 	ft_usleep(prog, prog->time_to_eat);
+	return (1);
 }
