@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpadasia <rpadasia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rpadasia <ryanpadasian@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:06:39 by rpadasia          #+#    #+#             */
-/*   Updated: 2025/10/08 15:17:09 by rpadasia         ###   ########.fr       */
+/*   Updated: 2025/10/09 17:36:05 by rpadasia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ int				create_threads(t_program *prog);
 void			join_threads(t_program *prog);
 void			print_state(t_philo *philo, char *msg);
 void			*exception(void *arg);
-// int				simulation_status(t_program *prog);
-void			actionman(t_philo *philo, int first_fork, int second_fork);
+int				simulation_status(t_program *prog);
+int				actionman(t_philo *philo, int first_fork, int second_fork);
 void			endless(t_program *prog);
 void			can_end(t_program *prog);
 void			incaseofdeath(t_program *prog, int i, long now);
